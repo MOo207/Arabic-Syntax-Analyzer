@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>FILE UPLOAD DEMO</title>
+  <link rel="stylesheet" type="text/css" href="stylesheets/upload.css" />
+</head>
+
+<body>
+  <div class="container">
+    <form id="form" action="/uploadFile" enctype="multipart/form-data" method="POST">
+      <div class="input-group">
+        <label for='file'>Select file</label>
+        <input id="file" type="file" name="myfile" required accept=".txt" />
+        <input class="submit-btn" type="submit" value="submit">
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
