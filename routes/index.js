@@ -21,7 +21,7 @@ var storage = multer.diskStorage({
     cb(null, "uploads/")
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname + "-" + Date.now() + ".txt")
+    cb(null, file.originalname.replace(/\.[A-z]*$/, '') + "-" + Date.now() + ".txt")
   }
 })
 
@@ -32,20 +32,11 @@ var upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1000 * 1000 },
   fileFilter: function (req, file, cb) {
-
-    // Set the filetypes, it is optional
-    var filetypes = /txt|text/;
-    var mimetype = filetypes.test(file.mimetype);
-
-    var extname = filetypes.test(path.extname(
-      file.originalname).toLowerCase());
-
-    if (mimetype && extname) {
-      return cb(null, true);
+    if (file.mimetype !== 'text/plain') {
+      return cb(null, false, new Error('goes wrong on the mimetype'));
     }
 
-    cb("Error: File upload only supports the "
-      + "following filetypes - " + filetypes);
+    cb(null, true);
   }
 
   // mypic is the name of file attribute
@@ -53,19 +44,54 @@ var upload = multer({
 
 router.post("/uploadFile", upload, function (req, res, next) {
   try {
-    const file = req.file; // We get the file in req.file
-    console.log(file);
-    if (!file || !file.mimetype == 'text/plain') { // in case we do not get a file we return
-      const error = new Error("Please upload a file");
-      error.httpStatusCode = 400;
-      return next(error);
+    if (!req.file) { // in case we do not get a file we return
+      return res.render('result', { contents: 'لا يوجد ملف مرفوع'});
     }
+    const file = req.file; // We get the file in req.file
+    const data = fs.readFileSync(file.path, 'utf8');
 
-    var data = fs.readFileSync(file.path, 'utf8');
-    res.render('result', { contents: data });
+    const words = extractWords(data);
+    const wordCount = words.length;
+    const occurrenceList = getOccurrenceList(words);
+    const uniqueWordCount = occurrenceList.length;
+
+    res.render('result', { contents: {
+      wordCount: wordCount,
+      uniqueWordCount: uniqueWordCount,
+      occurrenceList: occurrenceList
+    } });
   } catch (e) {
     res.send('Some problem happends' + e);
   }
 });
+
+function extractWords(text) {
+  const re = /[ء-ي]+/ig;
+  const found = text.match(re);
+  return found;
+}
+
+function getOccurrenceList(words) {
+  var occurrenceList = [];
+  var unique = new Set(words);
+  var uniqueWords = Array.from(unique);
+  counter = 0;
+  for (const outerIndex in uniqueWords) { 
+      counter = 0;
+      var word = uniqueWords[outerIndex];
+      for (const innerIndex in words) {
+         if(word === words[innerIndex]){
+             counter++;
+         }
+      }
+      occurrenceList[outerIndex] = [word, counter];
+  }
+  let sorted = occurrenceList.sort(function(a, b) { 
+    return a[1] < b[1] ? 1 : -1;
+});
+  return sorted;
+}
+
+
 
 module.exports = router;
