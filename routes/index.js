@@ -33,6 +33,7 @@ var upload = multer({
   limits: { fileSize: 5 * 1000 * 1000 },
   fileFilter: function (req, file, cb) {
     if (file.mimetype !== 'text/plain') {
+      console.log(file.mimetype);
       return cb(null, false, new Error('goes wrong on the mimetype'));
     }
 
@@ -47,12 +48,17 @@ router.post("/uploadFile", upload, function (req, res, next) {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع'});
     }
+    
     const file = req.file; // We get the file in req.file
+
     const data = fs.readFileSync(file.path, 'utf8');
 
     const words = extractWords(data);
+
     const wordCount = words.length;
+
     const occurrenceList = getOccurrenceList(words);
+    
     const uniqueWordCount = occurrenceList.length;
 
     res.render('result', { contents: {
@@ -66,7 +72,7 @@ router.post("/uploadFile", upload, function (req, res, next) {
 });
 
 function extractWords(text) {
-  const re = /[ء-ي]+/ig;
+  const re = /[ء-ي]*/ig;
   const found = text.match(re);
   return found;
 }

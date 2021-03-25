@@ -3,10 +3,11 @@
 
 <head>
   <title>FILE UPLOAD DEMO</title>
-  <link rel="stylesheet" type="text/css" href="stylesheets/upload.css" />
-  <link rel="stylesheet" type="text/css" href="stylesheets/loader.css" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="stylesheets/upload.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/loader.css" />
+  <script src="javascripts/fileValidator.js"></script>
 </head>
 
 <body>
@@ -15,24 +16,23 @@
     <form id="form" action="/uploadFile" enctype="multipart/form-data" method="POST">
       <div class="input-group">
         <label for='file' style="text-align: end;">إختر الملف</label>
-        <input id="file" type="file" name="myfile" required accept="text/plain"
-          oninvalid="this.setCustomValidity('تحقق من وجود ملف لرفعه وصيغته ( .txt أو .text) ')">
+        <input id="file" type="file" name="myfile" required accept=".txt">
         <input class="submit-btn" type="submit" value="إبدأ تحليل النصوص">
       </div>
     </form>
   </div>
-  
+
   <div class="loader-wrapper">
     <span class="loader"><span class="loader-inner"></span></span>
   </div>
-  
+
 
   <script>
     $(window).on("load", function () {
       $(".loader-wrapper").fadeOut("fast");
     });
   </script>
-  
+
 </body>
 
 </html>
