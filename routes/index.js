@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var jschardet = require("jschardet");
+const utf8 = require('utf8');
 var path = require('path');
 var fs = require('fs');
 
@@ -48,6 +50,17 @@ router.post("/uploadFile", upload, function (req, res, next) {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع'});
     }
+
+    console.log(process.cwd());
+ 
+    console.log(req.body);
+    const desiredMenu = req.body.desiredMenu;
+    var readMenuFile = readChooseMenu(desiredMenu);
+    console.log(readMenuFile);
+
+    var menuData = extractWords(readMenuFile);
+    console.log(menuData);
+    const wordsNum = req.body.wordsNum;
     
     const file = req.file; // We get the file in req.file
 
@@ -64,7 +77,9 @@ router.post("/uploadFile", upload, function (req, res, next) {
     res.render('result', { contents: {
       wordCount: wordCount,
       uniqueWordCount: uniqueWordCount,
-      occurrenceList: occurrenceList
+      occurrenceList: occurrenceList,
+      wordsNum: wordsNum
+   
     } });
   } catch (e) {
     res.send('Some problem happends' + e);
@@ -72,9 +87,13 @@ router.post("/uploadFile", upload, function (req, res, next) {
 });
 
 function extractWords(text) {
-  const re = /[ء-ي]*/ig;
-  const found = text.match(re);
-  return found;
+  const re = /([ء-ي]*[^\w|^\s\]^\/^[$&+,:;=?@،#|'<>.^*()%!-])/ig;
+  var found = text.match(re);
+  if(!found){
+    return found = "0";
+  } else{
+    return found; 
+  }
 }
 
 function getOccurrenceList(words) {
@@ -90,12 +109,38 @@ function getOccurrenceList(words) {
              counter++;
          }
       }
-      occurrenceList[outerIndex] = [word, counter];
+      occurrenceList[outerIndex] = [counter, word];
   }
   let sorted = occurrenceList.sort(function(a, b) { 
-    return a[1] < b[1] ? 1 : -1;
+    return a[0] < b[0] ? 1 : -1;
 });
+
+// sorted.forEach((value, index)=>{
+//   value.push(index+1);
+// });
+
+console.log(sorted[0][0]);
+
   return sorted;
+}
+
+function readChooseMenu(menuNum){
+  var menu;
+  switch (menuNum) {
+    case '1':
+      menu = fs.readFileSync('compare_menus/قائمة1.txt', 'utf8');
+      return menu;
+    case '2':
+      menu = fs.readFileSync('compare_menus/قائمة2.txt', 'utf8');
+      return menu;
+
+    case '3':
+      menu = fs.readFileSync('compare_menus/قائمة3.txt', 'utf8');
+      return menu;
+    default:
+      return "no choosen menu";
+  }
+
 }
 
 

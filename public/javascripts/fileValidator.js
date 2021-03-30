@@ -1,11 +1,15 @@
 $('#document').ready(function () {
     console.log('ready');
 
+    // $(".dropdown-menu a").click(function(){
+    //   const id = this.id;
+    //   console.log(id);
+    // });
+
     $('input[type=file]').on('invalid', function () {
       var file = this.files[0];
       if (checkFile(file) == 'emptyError')
         this.setCustomValidity('إختر ملفا لرفعه');
-
     });
 
     $('input[type=file]').on('change', function () {
