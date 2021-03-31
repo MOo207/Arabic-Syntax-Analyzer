@@ -42,26 +42,27 @@ var upload = multer({
     cb(null, true);
   }
 
-  // mypic is the name of file attribute
+  // myfile is the name of file attribute
 }).single("myfile");
 
 router.post("/uploadFile", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
-      return res.render('result', { contents: 'لا يوجد ملف مرفوع'});
+      return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
     }
 
-    console.log(process.cwd());
- 
     console.log(req.body);
     const desiredMenu = req.body.desiredMenu;
+    const wordsNum = req.body.wordsNum;
+
     var readMenuFile = readChooseMenu(desiredMenu);
-    console.log(readMenuFile);
 
     var menuData = extractWords(readMenuFile);
-    console.log(menuData);
-    const wordsNum = req.body.wordsNum;
-    
+
+    var rangeMenuData = menuData.slice(0, parseInt(wordsNum));
+
+    console.log(rangeMenuData.length, rangeMenuData);
+
     const file = req.file; // We get the file in req.file
 
     const data = fs.readFileSync(file.path, 'utf8');
@@ -71,16 +72,33 @@ router.post("/uploadFile", upload, function (req, res, next) {
     const wordCount = words.length;
 
     const occurrenceList = getOccurrenceList(words);
-    
+
     const uniqueWordCount = occurrenceList.length;
 
-    res.render('result', { contents: {
-      wordCount: wordCount,
-      uniqueWordCount: uniqueWordCount,
-      occurrenceList: occurrenceList,
-      wordsNum: wordsNum
-   
-    } });
+    const similarity = compareByList(occurrenceList, rangeMenuData);
+
+    const percentage = getPercentage(similarity.match);
+
+    const commonListIdx = similarity.commonList;
+
+    var commonList = commonListIdx.map(i => occurrenceList[i][1])
+    console.log(commonList);
+
+    var unCommonList = occurrenceList.filter(item => !commonListIdx.includes(occurrenceList.indexOf(item)))
+    console.log(unCommonList.length);
+
+    console.log("main f p: " + parseFloat(percentage).toFixed(2));
+    res.render('result', {
+      contents: {
+        wordCount: wordCount,
+        uniqueWordCount: uniqueWordCount,
+        occurrenceList: occurrenceList,
+        wordsNum: wordsNum,
+        truePercentage: parseFloat(percentage).toFixed(2),
+        commonList: commonList,
+        unCommonList: unCommonList
+      }
+    });
   } catch (e) {
     res.send('Some problem happends' + e);
   }
@@ -89,10 +107,10 @@ router.post("/uploadFile", upload, function (req, res, next) {
 function extractWords(text) {
   const re = /([ء-ي]*[^\w|^\s\]^\/^[$&+,:;=?@،#|'<>.^*()%!-])/ig;
   var found = text.match(re);
-  if(!found){
+  if (!found) {
     return found = "0";
-  } else{
-    return found; 
+  } else {
+    return found;
   }
 }
 
@@ -101,30 +119,23 @@ function getOccurrenceList(words) {
   var unique = new Set(words);
   var uniqueWords = Array.from(unique);
   counter = 0;
-  for (const outerIndex in uniqueWords) { 
-      counter = 0;
-      var word = uniqueWords[outerIndex];
-      for (const innerIndex in words) {
-         if(word === words[innerIndex]){
-             counter++;
-         }
+  for (const outerIndex in uniqueWords) {
+    counter = 0;
+    var word = uniqueWords[outerIndex];
+    for (const innerIndex in words) {
+      if (word === words[innerIndex]) {
+        counter++;
       }
-      occurrenceList[outerIndex] = [counter, word];
+    }
+    occurrenceList[outerIndex] = [counter, word];
   }
-  let sorted = occurrenceList.sort(function(a, b) { 
+  let sorted = occurrenceList.sort(function (a, b) {
     return a[0] < b[0] ? 1 : -1;
-});
-
-// sorted.forEach((value, index)=>{
-//   value.push(index+1);
-// });
-
-console.log(sorted[0][0]);
-
+  });
   return sorted;
 }
 
-function readChooseMenu(menuNum){
+function readChooseMenu(menuNum) {
   var menu;
   switch (menuNum) {
     case '1':
@@ -143,6 +154,33 @@ function readChooseMenu(menuNum){
 
 }
 
+function compareByList(occurrenceList, menu) {
+  var commonList = []
+  var match = [];
+  var index = 0;
+  for (const outerIndex in occurrenceList) {
+    var wordInput = occurrenceList[outerIndex][1];
+    for (const innerIndex in menu) {
+      var wordList = menu[innerIndex];
+      var cond = wordInput === wordList;
+      // console.log(wordInput+" vs "+wordList+ " = "+ cond);
+      if (cond) {
+        commonList.push(parseInt(outerIndex));
+        match[index] = true;
+        break;
+      } else {
+        match[index] = false;
+      }
+    }
+    index++;
+  }
+  console.log(commonList);
+  return { match, commonList };
+}
 
+function getPercentage(match) {
+  var trueList = match.filter(Boolean).length / match.length * 100;
+  return trueList;
+}
 
 module.exports = router;
