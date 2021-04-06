@@ -41,21 +41,23 @@
         </span>
 
         <span>
-          <select name="wordsNum" class="form-select input-medium" aria-label="Default select example">
-            <option selected>عدد الكلمات</option>
-            <option value="1">مئة</option>
-            <option value="5">ألف</option>
-            <option value="10">خمسة آلاف</option>
-            <option value="10000">عشرة آلاف</option>
+          <select name="wordsNum" class="form-select input-medium" required aria-label="Default select example">
+            <option value="" selected disabled hidden>عدد الكلمات</option>
+            <option value="100">مئة</option>
+            <option value="500">خمس مئة</option>
+            <option value="1000">ألف</option>
+            <option value="5000">خمسة آلاف</option>
           </select>
         </span>
 
         <span>
-          <select name="desiredMenu" class="form-select input-medium" aria-label="Default select example">
-            <option selected>قائمة الشيوع</option>
+          <select name="desiredMenu" class="form-select input-medium" required="required"
+            aria-label="Default select example">
+            <option value="" selected disabled="disabled" hidden>قائمة الشيوع</option>
             <option value="1">القائمة الأولى</option>
             <option value="2">القائمة الثانية</option>
             <option value="3">القائمة الثالثة</option>
+            <option value="4">القائمة الرابعة</option>
           </select>
 
       </div>

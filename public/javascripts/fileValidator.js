@@ -1,10 +1,12 @@
 $('#document').ready(function () {
   console.log('ready');
 
-  // $(".dropdown-menu a").click(function(){
-  //   const id = this.id;
-  //   console.log(id);
-  // });
+
+  $('select').on('invalid', function () {
+    if(this.value == null){
+    this.setCustomValidity('إختر من القائمة ');
+    }
+  });
 
   $('input[type=file]').on('invalid', function () {
     var file = this.files[0];

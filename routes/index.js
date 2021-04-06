@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var jschardet = require("jschardet");
-const utf8 = require('utf8');
 var path = require('path');
 var fs = require('fs');
 
@@ -12,7 +10,8 @@ router.get('/', function (req, res, next) {
 
 const multer = require("multer");
 
-var storage = multer.diskStorage({
+var storage = multer.diskStorage(
+  {
   destination: function (req, file, cb) {
     var dir = 'uploads/';
 
@@ -25,7 +24,8 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, file.originalname.replace(/\.[A-z]*$/, '') + "-" + Date.now() + ".txt")
   }
-})
+}
+);
 
 // Define the maximum size for uploading
 // picture i.e. 1 MB. it is optional
@@ -35,7 +35,7 @@ var upload = multer({
   limits: { fileSize: 5 * 1000 * 1000 },
   fileFilter: function (req, file, cb) {
     if (file.mimetype !== 'text/plain') {
-      console.log(file.mimetype);
+      // console.log(file.mimetype);
       return cb(null, false, new Error('goes wrong on the mimetype'));
     }
 
@@ -51,7 +51,7 @@ router.post("/uploadFile", upload, function (req, res, next) {
       return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
     }
 
-    console.log(req.body);
+    // console.log(req.file.buffer);
     const desiredMenu = req.body.desiredMenu;
     const wordsNum = req.body.wordsNum;
 
@@ -59,9 +59,14 @@ router.post("/uploadFile", upload, function (req, res, next) {
 
     var menuData = extractWords(readMenuFile);
 
-    var rangeMenuData = menuData.slice(0, parseInt(wordsNum));
+    var rangeMenuData;
+    if (wordsNum > menuData.length) {
+      rangeMenuData = menuData.slice(0, menuData.length);
+    } else {
+      rangeMenuData = menuData.slice(0, parseInt(wordsNum));
+    }
 
-    console.log(rangeMenuData.length, rangeMenuData);
+    // console.log(rangeMenuData.length, rangeMenuData);
 
     const file = req.file; // We get the file in req.file
 
@@ -82,17 +87,17 @@ router.post("/uploadFile", upload, function (req, res, next) {
     const commonListIdx = similarity.commonList;
 
     var commonList = commonListIdx.map(i => occurrenceList[i][1])
-    console.log(commonList);
+    // console.log(commonList);
 
     var unCommonList = occurrenceList.filter(item => !commonListIdx.includes(occurrenceList.indexOf(item)))
-    console.log(unCommonList.length);
+    // console.log(unCommonList.length);
 
-    console.log("main f p: " + parseFloat(percentage).toFixed(2));
+    // console.log("main f p: " + parseFloat(percentage).toFixed(2));
     res.render('result', {
       contents: {
         wordCount: wordCount,
         uniqueWordCount: uniqueWordCount,
-        occurrenceList: occurrenceList,
+        occurrenceList: occurrenceList.filter(Boolean),
         wordsNum: wordsNum,
         truePercentage: parseFloat(percentage).toFixed(2),
         commonList: commonList,
@@ -139,14 +144,16 @@ function readChooseMenu(menuNum) {
   var menu;
   switch (menuNum) {
     case '1':
-      menu = fs.readFileSync('compare_menus/قائمة1.txt', 'utf8');
+      menu = fs.readFileSync('compare_menus/القائمة الأولى.txt', 'utf8');
       return menu;
     case '2':
-      menu = fs.readFileSync('compare_menus/قائمة2.txt', 'utf8');
+      menu = fs.readFileSync('compare_menus/القائمة الثانية.txt', 'utf8');
       return menu;
-
     case '3':
-      menu = fs.readFileSync('compare_menus/قائمة3.txt', 'utf8');
+      menu = fs.readFileSync('compare_menus/القائمة الثالثة.txt', 'utf8');
+      return menu;
+    case '4':
+      menu = fs.readFileSync('compare_menus/القائمة الرابعة.txt', 'utf8');
       return menu;
     default:
       return "no choosen menu";
@@ -174,7 +181,6 @@ function compareByList(occurrenceList, menu) {
     }
     index++;
   }
-  console.log(commonList);
   return { match, commonList };
 }
 
