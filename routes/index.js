@@ -4,8 +4,12 @@ var path = require('path');
 var fs = require('fs');
 
 /* GET home page. */
+router.get('/t', function (req, res, next) {
+  res.render('test');
+});
+
 router.get('/', function (req, res, next) {
-  res.render('upload');
+  res.render('home');
 });
 
 const multer = require("multer");
@@ -45,7 +49,9 @@ var upload = multer({
   // myfile is the name of file attribute
 }).single("myfile");
 
-router.post("/uploadFile", upload, function (req, res, next) {
+
+
+router.post("/compareFreqLists", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
@@ -93,7 +99,7 @@ router.post("/uploadFile", upload, function (req, res, next) {
     // console.log(unCommonList.length);
 
     // console.log("main f p: " + parseFloat(percentage).toFixed(2));
-    res.render('result', {
+    res.render('compareFreqLists', {
       contents: {
         wordCount: wordCount,
         uniqueWordCount: uniqueWordCount,
@@ -102,6 +108,75 @@ router.post("/uploadFile", upload, function (req, res, next) {
         truePercentage: parseFloat(percentage).toFixed(2),
         commonList: commonList,
         unCommonList: unCommonList
+      }
+    });
+  } catch (e) {
+    res.send('Some problem happends' + e);
+  }
+});
+
+router.post("/vocabList", upload, function (req, res, next) {
+  try {
+    if (!req.file) { // in case we do not get a file we return
+      return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
+    }
+
+    // console.log(rangeMenuData.length, rangeMenuData);
+
+    const file = req.file; // We get the file in req.file
+
+    console.log(file);
+
+    const data = fs.readFileSync(file.path, 'utf8');
+
+    const words = extractWords(data);
+
+    const wordCount = words.length;
+
+    const occurrenceList = getOccurrenceList(words);
+
+    const uniqueWordCount = occurrenceList.length;
+
+    res.render('vocabList', {
+      contents: {
+        wordCount: wordCount,
+        uniqueWordCount: uniqueWordCount,
+        occurrenceList: occurrenceList.filter(Boolean),
+      }
+    });
+  } catch (e) {
+    res.send('Some problem happends' + e);
+  }
+});
+
+
+router.post("/frequencyList", upload, function (req, res, next) {
+  try {
+    if (!req.file) { // in case we do not get a file we return
+      return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
+    }
+
+    // console.log(rangeMenuData.length, rangeMenuData);
+
+    const file = req.file; // We get the file in req.file
+
+    console.log(file);
+
+    const data = fs.readFileSync(file.path, 'utf8');
+
+    const words = extractWords(data);
+
+    const wordCount = words.length;
+
+    const occurrenceList = getOccurrenceList(words);
+
+    const uniqueWordCount = occurrenceList.length;
+
+    res.render('frequencyList', {
+      contents: {
+        wordCount: wordCount,
+        uniqueWordCount: uniqueWordCount,
+        occurrenceList: occurrenceList.filter(Boolean),
       }
     });
   } catch (e) {
