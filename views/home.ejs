@@ -10,10 +10,15 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900&display=swap"
         rel="stylesheet">
 
-    <title>محلل النصوص العربية</title>
+    <title>
+        المعالج الآلي لمفردات النصوص العربية
+    </title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <link href="//db.onlinewebfonts.com/c/22b5e24da7d5f327cf3bd91ec55c9fea?family=Traditional+Arabic" rel="stylesheet"
+        type="text/css" />
 
     <script src="javascripts/fileValidator.js"></script>
     <!-- Additional CSS Files -->
@@ -49,12 +54,12 @@
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
+                        <ul class="nav" style="font-size: medium;">
                             <li class="scroll-to-section"><a href="#contact-us">حول البرنامج</a></li>
-                            <li class="scroll-to-section"><a href="#projects">مقارن قوائم الشيوع</a></li>
-                            <li class="scroll-to-section"><a href="#subscribe">منشئ قوائم الشيوع</a></li>
-                            <li class="scroll-to-section"><a href="#about">منشئ قوائم المفردات</a></li>
-                            <li class="scroll-to-section"><a href="#top">الرئيسية</a></li>
+                            <li class="scroll-to-section"><a href="vocabularylist">منشئ قوائم المفردات</a></li>
+                            <li class="scroll-to-section"><a href="comparefreqlists">مقارن قوائم الشيوع</a></li>
+                            <li class="scroll-to-section"><a href="frequencylist">منشئ قوائم الشيوع</a></li>
+                            <li class="scroll-to-section"><a href="home">الرئيسية</a></li>
                         </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
@@ -108,9 +113,12 @@
                     <img src="assets/images/slide-02.jpg" alt="">
                     <div class="text-content">
                         <h3 style="font-size: xx-large;">خدماتنا</h3>
-                        <h5 style="font-size: larger;">يجد زائر الموقع عددًا من خدمات معالجة النصوص والمفردات<br> دون
-                            الحاجة إلى تنزيل أو تثبيت أي برنامج على جهازك الحاسوبي أو جوالك، <br> وكل ما تحتاج إليه
-                            متصفح إنترنت لاستخدام هذه البرمجية، <br> حيث تمت برمجته بلغة انترنت تعمل على خوادم الشبكة.
+                        <h5 style="font-size: larger;">
+                            <br> يجد زائر الموقع عددًا من خدمات معالجة النصوص والمفردات
+                            <br> دون الحاجة إلى تنزيل أو تثبيت أي برنامج على جهازه الحاسوبي أو جواله
+                            <br> وكل ما يحتاج إليه متصفح إنترنت لاستخدام هذه البرمجية
+                            <br> حيث تمت برمجته بلغة انترنت تعمل على خوادم الشبكة.
+
                         </h5>
                         <a href="#contact-us" class="main-stroked-button">استكشف الخدمات</a>
                     </div>
@@ -123,10 +131,11 @@
                     <img src="assets/images/slide-03.jpg" alt="">
                     <div class="text-content">
                         <h3 style="font-size: xx-large;">ماذا يقدم البرنامج</h3>
-                        <h5 style="font-size: larger;">إنشاء قوائم الشيوع لمفردات النصوص التي يتم رفعها للموقع <br> من
-                            خلال ملف ذو امتداد.(*.txt)
-                            مقارنة قوائم شيوع المفردات للنص الذي يتم رفعه إلى الموقع بقوائم شيوع اللغة العربية المتوفرة
-                            في البرنامج <br>
+                        <h5 style="font-size: larger;">
+                            <br> إنشاء قوائم الشيوع لمفردات النصوص التي يتم رفعها للموقع
+                            <br> من خلال ملف ذو امتداد (تي إكس تي)
+                            <br> مقارنة قوائم شيوع المفردات للنص الذي يتم رفعه إلى الموقع
+                            بقوائم شيوع اللغة العربية المتوفرة في البرنامج
                         </h5>
                         <a href="#about" class="main-stroked-button">جرب الآن</a>
                     </div>
@@ -138,524 +147,110 @@
     <div class="scroll-down scroll-to-section"><a href="#about"><i class="fa fa-arrow-down"></i></a></div>
     <!-- ***** Main Banner Area End ***** -->
 
-    <style>
-        hr.rounded {
-            border-top: 8px solid;
-            border-color: rgba(104, 204, 152, 1);
-            border-radius: 5px;
-        }
 
-        form {
-            background-color: white;
-            padding: 30px;
-        }
-
-        form .input-group {
-            margin-bottom: 15px;
-        }
-
-        form label {
-            display: inline-block;
-            width: 100%;
-            text-align: right;
-            margin-bottom: 10px;
-        }
-
-        form input {
-            padding: 12px 20px;
-            width: 100%;
-            border: 1px solid #ccc;
-        }
-
-
-        .btn-group,
-        .btn-group-vertical {
-            position: relative;
-            display: -ms-inline-flexbox;
-            display: flex;
-            vertical-align: middle;
-        }
-
-        .form-select {
-            /* margin-top: 20px; */
-            width: max-content;
-            margin: 17px 20px 0px 20px;
-        }
-
-        .form-select option {
-            /* margin-top: 20px; */
-            text-align: right;
-        }
-
-        .submit-btn {
-            width: 100%;
-            background: #5fb759;
-            font-size: 12px;
-            color: white;
-            border-radius: 3px;
-            /* padding: 20px; */
-            text-align: center;
-        }
-    </style>
-
-
-
-    <!-- ***** About Area Starts ***** -->
-    <section class="section" id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 justify-content-center"
-                    style="text-align: center; font-size: xx-large; color: #5fb759;">منشئ قائمة المفردات</div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="left-text-content">
-               
-
-                        <form id="form" action="/vocabList" enctype="multipart/form-data" method="POST">
-                            <div class="input-group">
-
-                                <label for='file' style="text-align: end;">(txt) إختر الملف بصيغة</label>
-                                <input id="file" type="file" name="myfile" required accept=".txt">
-                            </div>
-
-                            <div class="btn-group">
-
-                                <span>
-                                    <div class="input-group">
-                                        <input id="submitBtn" class="submit-btn" type="submit"
-                                            value="إبدأ تحليل النصوص">
-                                    </div>
-                                </span>
-
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="right-text-content">
-                        <div class="section-heading">
-                            <h6></h6>
-                            <div style="text-align: right; font-size: mediumss;">
-                                يقوم البرنامج بتصفية القائمة من الرموز
-                                التي لا علاقة لها بالمفردات العربية، وبعد ذلك يتم إخراج النتيجة للمستخدم، وهي عبارة عن:
-                                ملفين إلكترونيين بتنسيق أكسل و(بي دي إف) قابلين للتنزيل، فيهما جدول مكون من ثلاثة أعمدة،
-                                هي على النحو التالي:
-                                ترتيب المفردة بالقائمة.
-                                المفردة.
-                                مساحة فارغة لباقي الصفحة أمام كل مفردة؛ لإتاحة مكان للمستخدم يكتب فيه ملاحظاته حول
-                                المفردة، كترجمتها للغته أو معناها باللغة العربية.
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-        </div>
-    </section>
-    <!-- ***** About Area Ends ***** -->
-
-
-    <hr class="rounded">
-
-    <!-- ***** Features Big Item Start ***** -->
-    <section class="section" id="subscribe">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 justify-content-center"
-                    style="text-align: center; font-size: xx-large; color: #5fb759;">منشئ قوائم الشيوع</div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="left-text-content">
-                        <!-- <script src="javascripts/fileValidator.js"></script> -->
-
-                        <form id="form" action="/frequencyList" enctype="multipart/form-data" method="POST"
-                            style="background-color: transparent;">
-                            <div class="input-group">
-
-                                <label for='file' style="text-align: end;">(txt) إختر الملف بصيغة</label>
-                                <input id="file" type="file" name="myfile" required accept=".txt">
-                            </div>
-
-                            <div class="btn-group">
-
-                                <span>
-                                    <div class="input-group">
-                                        <input id="submitBtn" class="submit-btn" type="submit"
-                                            value="إبدأ تحليل النصوص">
-                                    </div>
-                                </span>
-
-                            </div>
-                    </div>
-                    </form>
-
-                </div>
-
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="right-text-content">
-                        <div class="section-heading">
-                            <h6></h6>
-                            <div style="text-align: right; font-size: medium; margin-top: 40px; color: black;">
-                                يقوم البرنامج بتكوين قائمة بمفردات المقرر الذي يتم رفعه للموقع بصيغة (تي اكس تي)، وفرزها
-                                حسب عدد مرات تكرار كل مفردة تنازليا، ومن ثم إجراء عدة معالجات على القائمة التي استخرجها
-                                من النص؛ بهدف تصفيتها من العلامات والرموز والحروف والمفردات غير العربية والسوابق
-                                واللواحق؛ لتحديد عدد تكرار المفردات بأدق شكل ممكن لمعالجته آليا.
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-    <!-- ***** Features Big Item End ***** -->
-
-
-    <hr class="rounded">
-
-    <!-- ***** Projects Area Starts ***** -->
-    <section class="section" id="projects">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 justify-content-center"
-                    style="text-align: center; font-size: xx-large; color: #5fb759;">مقارن قوائم الشيوع</div>
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="left-text-content">
-                        <!-- <script src="javascripts/fileValidator.js"></script> -->
-
-                        <form id="form" action="/compareFreqLists" enctype="multipart/form-data" method="POST">
-                            <div class="input-group">
-
-                                <label for='file' style="text-align: end;">(txt) إختر الملف بصيغة</label>
-                                <input id="file" type="file" name="myfile" required accept=".txt">
-                            </div>
-
-                            <div class="btn-group">
-
-                                <span>
-                                    <div class="input-group">
-                                        <input id="submitBtn" class="submit-btn" type="submit"
-                                            value="إبدأ تحليل النصوص">
-                                    </div>
-                                </span>
-
-                                <span>
-                                    <select name="wordsNum" class="form-select input-medium" required
-                                        aria-label="Default select example">
-                                        <option value="" selected disabled hidden>عدد الكلمات</option>
-                                        <option value="100">مئة</option>
-                                        <option value="500">خمس مئة</option>
-                                        <option value="1000">ألف</option>
-                                        <option value="5000">خمسة آلاف</option>
-                                    </select>
-                                </span>
-
-                                <span>
-                                    <select name="desiredMenu" class="form-select input-medium" required="required"
-                                        aria-label="Default select example">
-                                        <option value="" selected disabled="disabled" hidden>قائمة الشيوع</option>
-                                        <option value="1">القائمة الأولى</option>
-                                        <option value="2">القائمة الثانية</option>
-                                        <option value="3">القائمة الثالثة</option>
-                                        <option value="4">القائمة الرابعة</option>
-                                    </select>
-                                </span>
-
-                            </div>
-                    </div>
-                    </form>
-
-                </div>
-
-                <div class="col-lg-6 col-md-6 col-xs-12">
-                    <div class="right-text-content">
-                        <div class="section-heading">
-                            <h6></h6>
-                            <div style="text-align: right; font-size: mediumss; margin-top: 40px;">
-                                مقارنة قائمة شيوع المقرر المرفوع، والمكونة بنفس الآلية الموجودة في صفحة منشئ قوائم
-                                الشيوع، وتكون المقارنة بأحد أربع قوائم متاحة في البرنامج، وهي:
-                                قائمة الكلمات الأكثر تكرارا لكامل المدونة اللغوية العربية لمدينة الملك عبدالعزيز للعلوم
-                                والتقنية، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ قوائم الشيوع.
-                                قاموس تكرارات اللغة العربية، المفردات الأساسية للمتعلم لتيم بوكوالتر، وذلك بعد معالجتها
-                                بنفس آلية معالجة القوائم في صفحة منشئ قوائم الشيوع.
-                                -قائمة مكة للمفردات الشائعة، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ
-                                قوائم الشيوع.
-                                قائمة مقترحة للمفردات الشائعة في اللغة العربية: وهي قائمة منتخبة من القوائم الثلاث
-                                السابقة، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ قوائم الشيوع.
-                                بعد ذلك يتم عرض النسبة المئوية للتماثل ما بين القائمة المستخرجة من المقرر والقائمة
-                                المختارة من البرنامج؛ لتعطي الفاحص أداة معيارية توضح له مدى قرب أو بعد المقرر المفحوص من
-                                اللغة العربية الشائعة حسب القائمة المختارة.
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ***** Projects Area Ends ***** -->
-
-    <!-- ***** Testimonials Starts ***** -->
-    <!-- <section class="section" id="testimonials">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-heading">
-                        <h6>Digital Team</h6>
-                        <h2>young and talented members</h2>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12 mobile-bottom-fix-big"
-                    data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
-                    <div class="owl-carousel owl-theme">
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-01.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.01 White Cheese</h4>
-                            <span>Digital Marketer</span>
-                        </div>
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-04.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.02 Snow Mary</h4>
-                            <span>Site Analyst</span>
-                        </div>
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-02.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.03 Johnny Egg</h4>
-                            <span>Digital Influencer</span>
-                        </div>
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-05.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.04 Catherine Phyu</h4>
-                            <span>Co Founder</span>
-                        </div>
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-03.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.05 Shao Lynn</h4>
-                            <span>Chief Marketing</span>
-                        </div>
-
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-04.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.06 Emma Honey</h4>
-                            <span>Digital Influencer</span>
-                        </div>
-
-                        <div class="item author-item">
-                            <div class="member-thumb">
-                                <img src="assets/images/member-item-06.jpg" alt="">
-                                <div class="hover-effect">
-                                    <div class="hover-content">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-rss"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <h4>.07 Oliva Sofie</h4>
-                            <span>Website Analyst</span>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- ***** Testimonials Ends ***** -->
-
-    <!-- ***** Features Big Item Start ***** -->
-    <!-- <section class="section" id="features">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12"
-                data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
-                <div class="features-item">
-                    <div class="features-icon">
-                        <img src="assets/images/features-icon-1.png" alt="">
-                    </div>
-                    <div class="features-content">
-                        <h4>Initial Work</h4>
-                        <p>Proin euismod sem ut diam ultricies, ut faucibus velit ultricies. Nam eu turpis quam.
-                            Duis ac condimentum eros.</p>
-                        <a href="#" class="text-button-icon">
-                            Learn More <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12"
-                data-scroll-reveal="enter bottom move 30px over 0.6s after 0.4s">
-                <div class="features-item">
-                    <div class="features-icon">
-                        <img src="assets/images/features-icon-1.png" alt="">
-                    </div>
-                    <div class="features-content">
-                        <h4>Master Planning</h4>
-                        <p>Proin euismod sem ut diam ultricies, ut faucibus velit ultricies. Nam eu turpis quam.
-                            Duis ac condimentum eros.</p>
-                        <a href="#" class="text-button-icon">
-                            Learn More <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12"
-                data-scroll-reveal="enter right move 30px over 0.6s after 0.4s">
-                <div class="features-item">
-                    <div class="features-icon">
-                        <img src="assets/images/features-icon-1.png" alt="">
-                    </div>
-                    <div class="features-content">
-                        <h4>Smooth Execution</h4>
-                        <p>Proin euismod sem ut diam ultricies, ut faucibus velit ultricies. Nam eu turpis quam.
-                            Duis ac condimentum eros.</p>
-                        <a href="#" class="text-button-icon">
-                            Learn More <i class="fa fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    </section>
-
-    <hr class="rounded">
-    <!-- ***** Features Big Item End ***** -->
+    
 
     <!-- ***** Contact Us Area Starts ***** -->
     <section class="section" id="contact-us">
         <div class="container">
             <div class="contact-form">
                 <div class="row">
-                    <div class="left-text-content" style="padding: 0 50px 50px 50px;">
-                        <div class="section-heading text-right">
-                            <h2 style="color: #5fb759;">عن البرنامج</h2>
-                            <h5 style="color: gray;">محلل النصوص العربية ومنشئ قوائم الشيوع لواضعي المناهج والطلاب غير
-                                الناطقين بالعربية</h5>
-                        </div>
+                    <div class="right-text-content" style="padding: 0 50px 50px 50px;">
 
-                        <div class="text-right" style="font-size: large;">
-                            هذا البرنامج نتاج رسالة علمية؛ لنيل شهادة الدكتوراه العالمية العالية من قسم إعداد
-                            وتدريب المعلمين بمعهد تعليم اللغة العربية بالجامعة الإسلامية بالمدينة المنورة.
-                            فكرة البرنامج:
-                            هي معالجة محتويات مناهج تعليم اللغة العربية؛ لدراستها وفق النحو التالي:
-                            صفحة منشئ قوائم الشيوع:
-                            يقوم البرنامج بتكوين قائمة بمفردات المقرر الذي يتم رفعه للموقع بصيغة (تي اكس تي)،
-                            وفرزها حسب عدد مرات تكرار كل مفردة تنازليا، ومن ثم إجراء عدة معالجات على القائمة
-                            التي استخرجها من النص؛ بهدف تصفيتها من العلامات والرموز والحروف والمفردات غير
-                            العربية والسوابق واللواحق؛ لتحديد عدد تكرار المفردات بأدق شكل ممكن لمعالجته آليا.
-                            صفحة مقارنة قوائم الشيوع:
-                            يتم فيها مقارنة قائمة شيوع المقرر المرفوع، والمكونة بنفس الآلية الموجودة في صفحة
-                            منشئ قوائم الشيوع، وتكون المقارنة بأحد أربع قوائم متاحة في البرنامج، وهي:
-                            قائمة الكلمات الأكثر تكرارا لكامل المدونة اللغوية العربية لمدينة الملك عبدالعزيز
-                            للعلوم والتقنية، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ قوائم
-                            الشيوع.
-                            قاموس تكرارات اللغة العربية، المفردات الأساسية للمتعلم لتيم بوكوالتر، وذلك بعد
-                            معالجتها بنفس آلية معالجة القوائم في صفحة منشئ قوائم الشيوع.
-                            -قائمة مكة للمفردات الشائعة، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ
-                            قوائم الشيوع.
-                            قائمة مقترحة للمفردات الشائعة في اللغة العربية: وهي قائمة منتخبة من القوائم الثلاث
-                            السابقة، وذلك بعد معالجتها بنفس آلية معالجة القوائم في صفحة منشئ قوائم الشيوع.
-                            بعد ذلك يتم عرض النسبة المئوية للتماثل ما بين القائمة المستخرجة من المقرر والقائمة
-                            المختارة من البرنامج؛ لتعطي الفاحص أداة معيارية توضح له مدى قرب أو بعد المقرر
-                            المفحوص من اللغة العربية الشائعة حسب القائمة المختارة.
-                            صفحة منشئ قوائم المفردات:
-                            يتم فيها إنشاء قائمة بكامل مفردات المقرر، وتكون مرتبة بحسب تكرارات الكلمات في المقرر
-                            تنازليا أو ألف بائيا، وتوضع في جدول مكون من أعمدة، أول عمود يوضع فيه رقم الكلمة،
-                            وثاني عمود يوضع فيه الكلمة، وثالث عمود يوضع فيه مساحة فارغة؛ لتتيح للمستخدم كتابة
-                            ملاحظاته حول الكلمة، كترجمتها بلغته أو غيرها من الملاحظات.
+                        <div class="text-right" style="font-size: large; margin-top: 20px;">
 
+                            <div>
+                                <h2 style="color: #5fb759;">عن البرنامج</h2>
+                                <h5 style="color: gray; font-size: 15px;">
+                                    برنامج للمعالجة الآلية لمفردات نصوص مقررات تعليم اللغة العربية الناطقين بلغات أخرى
+                                    لتحديد تكرار مفرداتها ومدى ارتباطها بقوائم الشيوع
+                                </h5>
+                            </div>
+
+                            <br>هذا البرنامج أحد نتائج رسالة علمية مقدمة للحصول على درجة العالمية العالية (الدكتوراه) في
+                            .قسم إعداد وتدريب المعلمين بمعهد تعليم اللغة العربية بالجامعة الإسلامية بالمدينة المنورة
+                            <br> إعداد الطالب: ناصر بن إبراهيم الراجح
+                            <br> إشراف الدكتور: أحمد بن صالح الصبيحي
+                            <br> العام الجامعي 1441-1442هـ
 
                         </div>
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+      <div class="container">
+            <div class="contact-form">
+                <div class="row">
+                    <div class="right-text-content" style="padding: 0 50px 50px 50px;">
+                        <div class="text-right">
+                        <h2 style="color: #5fb759; margin-bottom: 10px;"> فكرة البرنامج</h2>
+                        <h5 style="color: gray;">معالجة محتويات مناهج تعليم اللغة العربية؛ لدراستها
+                            وفق النحو التالية</h5>
+                    </div>
+
+                      <div class="text-right">
+                    - صفحة منشئ قوائم الشيوع:
+<br>
+                    يقوم البرنامج بتكوين قائمة بمفردات المقرر الذي يتم رفعه للموقع بصيغة (تي اكس تي)، وفرزها حسب
+                    عدد مرات تكرار كل مفردة تنازليا، ومن ثم إجراء عدة معالجات على القائمة التي استخرجها من النص؛
+                    بهدف تصفيتها من العلامات والرموز والحروف والمفردات غير العربية والسوابق واللواحق؛ لتحديد عدد
+                    تكرار المفردات بأدق شكل ممكن لمعالجته آليا.
+                    <br>
+                    - صفحة مقارنة قوائم الشيوع:
+                    <br>
+                    يتم فيها مقارنة قائمة شيوع المقرر المرفوع، والمكونة بنفس الآلية الموجودة في صفحة منشئ قوائم
+                    
+                    الشيوع، وتكون المقارنة بأحد أربع قوائم متاحة في البرنامج، وهي:
+                    <ul style=" list-style-type: none;">
+
+                    
+                    <li>القائمة الأولى:
+                    
+                    قائمة معالجة من قائمة الكلمات الأكثر تكرارا لكامل المدونة اللغوية العربية
+                    لمدينة الملك عبدالعزيز للعلوم والتقنية.</li>
+                  
+                <li>
+                    القائمة الثانية:
+                    
+                    قائمة معالجة من قاموس تكرارات اللغة العربية، المفردات الأساسية للمتعلم لتيم
+                    بوكوالتر.</li>
+                
+                    <li>
+                    القائمة الثالثة:
+                    قائمة معالجة من قائمة مكة للمفردات الشائعة.</li>
+
+                </li>
+                    القائمة الرابعة:
+                  
+                    قائمة مقترحة للمفردات الشائعة في اللغة العربية: وهي قائمة منتخبة من القوائم
+                    الثلاث السابقة. </li>
+       
+                    بعد ذلك يتم عرض النسبة المئوية للتماثل ما بين القائمة المستخرجة من المقرر والقائمة المختارة
+                    من البرنامج؛ لتعطي الفاحص أداة معيارية توضح له مدى قرب أو بعد المقرر المفحوص من اللغة
+                    العربية الشائعة حسب القائمة المختارة.
+               
+                </ul>
+                    - صفحة منشئ قوائم المفردات:
+                    <br>
+                    يتم فيها إنشاء قائمة بكامل مفردات المقرر، وتكون مرتبة بحسب تكرارات الكلمات في المقرر تنازليا
+                    أو ألف بائيا، وتوضع في جدول مكون من ثلاثة أعمدة يوضع في كلٍ منها:
+                    <br>
+                    رقم الكلمة.
+                    <br>
+                    الكلمة.
+                    <br>
+                    مساحة فارغة؛ تتيح للمستخدم كتابة ملاحظاته حول الكلمة، كترجمتها بلغته أو غيرها من الملاحظات.
+                    <br>
+                    
+                  <a href="gli2003@gmail.com"> gli2003@gmail.com</a>   :يمكن التواصل مع الباحث على البريد التالي 
+                </div>
+
+                </div>
+            </div>
+        </div>
+      </div>
     </section>
     <!-- ***** Contact Us Area Ends ***** -->
 
@@ -676,9 +271,11 @@
                             </li>
                             <!-- <li><a rel="nofollow" href="https://fb.com/templatemo"><i class="fa fa-facebook"></i></a> -->
                             </li>
-                            <li><a rel="nofollow" href="https://twitter.com/glx96"><i style="font-size: 22px; color: cornflowerblue;" class="fa fa-twitter"></i></a>
+                            <li><a rel="nofollow" href="https://twitter.com/glx96"><i style="color: cornflowerblue;"
+                                        class="fa fa-twitter"></i></a>
                             </li>
-                            <!-- <li><a rel="nofollow" href="https://fb.com/templatemo"><i class="fa fa-linkedin"></i></a> -->
+                            <li><a rel="nofollow" href="https://www.instagram.com/gli20032"><i class="fa fa-instagram"
+                                        aria-hidden="true" style="color: #C13584;"></i></a>
                             </li>
                             <!-- <li><a rel="nofollow" href="https://fb.com/templatemo"><i class="fa fa-dribbble"></i></a> -->
                             </li>
@@ -696,7 +293,7 @@
     <script src="assets/js/jquery-2.1.0.min.js"></script>
 
     <!-- Bootstrap -->
-    <script src="assets/js/popper.js"></script>
+    <!-- <script src="assets/js/popper.js"></script> -->
     <script src="assets/js/bootstrap.min.js"></script>
 
     <!-- Plugins -->

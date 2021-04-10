@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var fs = require('fs');
 
+
 /* GET home page. */
 router.get('/t', function (req, res, next) {
   res.render('test');
@@ -12,23 +13,42 @@ router.get('/', function (req, res, next) {
   res.render('home');
 });
 
+router.get('/home', function (req, res, next) {
+  res.render('home');
+});
+
+router.get('/vocabularylist', function (req, res, next) {
+  res.render('vocabularyList');
+});
+
+
+router.get('/frequencylist', function (req, res, next) {
+  res.render('frequencyList');
+});
+
+router.get('/comparefreqlists', function (req, res, next) {
+  res.render('compareFreqLists');
+});
+
+
+
 const multer = require("multer");
 
 var storage = multer.diskStorage(
   {
-  destination: function (req, file, cb) {
-    var dir = 'uploads/';
+    destination: function (req, file, cb) {
+      var dir = 'uploads/';
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      // Uploads is the Upload_folder_name
+      cb(null, "uploads/")
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname.replace(/\.[A-z]*$/, '') + "-" + Date.now() + ".txt")
     }
-    // Uploads is the Upload_folder_name
-    cb(null, "uploads/")
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname.replace(/\.[A-z]*$/, '') + "-" + Date.now() + ".txt")
   }
-}
 );
 
 // Define the maximum size for uploading
@@ -36,7 +56,7 @@ var storage = multer.diskStorage(
 
 var upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1000 * 1000 },
+  limits: { fileSize: 20 * 1000 * 1000 },
   fileFilter: function (req, file, cb) {
     if (file.mimetype !== 'text/plain') {
       // console.log(file.mimetype);
@@ -51,7 +71,7 @@ var upload = multer({
 
 
 
-router.post("/compareFreqLists", upload, function (req, res, next) {
+router.post("/compare", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
@@ -77,6 +97,8 @@ router.post("/compareFreqLists", upload, function (req, res, next) {
     const file = req.file; // We get the file in req.file
 
     const data = fs.readFileSync(file.path, 'utf8');
+    // const data = readFileSync_encoding(file.path, '7bit');
+    // console.log(data);
 
     const words = extractWords(data);
 
@@ -99,7 +121,7 @@ router.post("/compareFreqLists", upload, function (req, res, next) {
     // console.log(unCommonList.length);
 
     // console.log("main f p: " + parseFloat(percentage).toFixed(2));
-    res.render('compareFreqLists', {
+    res.render('compareResults', {
       contents: {
         wordCount: wordCount,
         uniqueWordCount: uniqueWordCount,
@@ -115,7 +137,8 @@ router.post("/compareFreqLists", upload, function (req, res, next) {
   }
 });
 
-router.post("/vocabList", upload, function (req, res, next) {
+
+router.post("/vocabulary", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
@@ -125,11 +148,13 @@ router.post("/vocabList", upload, function (req, res, next) {
 
     const file = req.file; // We get the file in req.file
 
-    console.log(file);
+    // console.log(file);
 
     const data = fs.readFileSync(file.path, 'utf8');
 
-    const words = extractWords(data);
+    const normalized = normalize_text(data);
+
+    const words = extractWords(normalized);
 
     const wordCount = words.length;
 
@@ -137,7 +162,7 @@ router.post("/vocabList", upload, function (req, res, next) {
 
     const uniqueWordCount = occurrenceList.length;
 
-    res.render('vocabList', {
+    res.render('vocabularyResult', {
       contents: {
         wordCount: wordCount,
         uniqueWordCount: uniqueWordCount,
@@ -150,7 +175,27 @@ router.post("/vocabList", upload, function (req, res, next) {
 });
 
 
-router.post("/frequencyList", upload, function (req, res, next) {
+function normalize_text(text) {
+
+  //remove special characters
+  text = text.replace(/([^\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z 0-9])/g, '');
+  //normalize Arabic
+  // text = text.replace(/(آ|إ|أ)/g, 'ا');
+  // text = text.replace(/(ة)/g, 'ه');
+  // text = text.replace(/(ئ|ؤ)/g, 'ء')
+  // text = text.replace(/(ى)/g, 'ي');
+
+  //convert arabic numerals to english counterparts.
+  var starter = 0x660;
+  for (var i = 0; i < 10; i++) {
+    text.replace(String.fromCharCode(starter + i), String.fromCharCode(48 + i));
+  }
+
+  return text;
+}
+
+
+router.post("/frequency", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
       return res.render('result', { contents: 'لا يوجد ملف مرفوع' });
@@ -160,19 +205,23 @@ router.post("/frequencyList", upload, function (req, res, next) {
 
     const file = req.file; // We get the file in req.file
 
-    console.log(file);
+    // console.log(file.encoding);
 
     const data = fs.readFileSync(file.path, 'utf8');
 
-    const words = extractWords(data);
+    const normalized = normalize_text(data);
+
+    const words = extractWords(normalized);
+
+    const process = removePreAndPost(words);
 
     const wordCount = words.length;
 
-    const occurrenceList = getOccurrenceList(words);
+    const occurrenceList = getOccurrenceList(process);
 
     const uniqueWordCount = occurrenceList.length;
 
-    res.render('frequencyList', {
+    res.render('frequencyResult', {
       contents: {
         wordCount: wordCount,
         uniqueWordCount: uniqueWordCount,
@@ -185,7 +234,7 @@ router.post("/frequencyList", upload, function (req, res, next) {
 });
 
 function extractWords(text) {
-  const re = /([ء-ي]*[^\w|^\s\]^\/^[$&+,:;=?@،#|'<>.^*()%!-])/ig;
+  const re = /([ء-ي]*[^\w|^\s\]^\/^[$&+,ـ{}—!&:;=?@،«»#|"'؛<>.^*َ()%!-])/ig;
   var found = text.match(re);
   if (!found) {
     return found = "0";
@@ -200,16 +249,16 @@ function getOccurrenceList(words) {
   var uniqueWords = Array.from(unique);
   counter = 0;
   for (const outerIndex in uniqueWords) {
-    counter = 0;
     var word = uniqueWords[outerIndex];
-    for (const innerIndex in words) {
-      if (word === words[innerIndex]) {
-        counter++;
-      }
-    }
-    occurrenceList[outerIndex] = [counter, word];
+    var joins = words.join(" ");
+    var matches = joins.match(new RegExp(word, 'g'));
+    occurrenceList[outerIndex] = [matches.length, word];
   }
-  let sorted = occurrenceList.sort(function (a, b) {
+  const filter = occurrenceList.filter(function (w) {
+    return (w[1] == "و" || w[1] == "ب") || w[1].length > 1
+  });
+
+  let sorted = filter.sort(function (a, b) {
     return a[0] < b[0] ? 1 : -1;
   });
   return sorted;
@@ -262,6 +311,67 @@ function compareByList(occurrenceList, menu) {
 function getPercentage(match) {
   var trueList = match.filter(Boolean).length / match.length * 100;
   return trueList;
+}
+
+function removePreAndPost(words) {
+  list = words;
+  for (const word in words) {
+
+      // و 1-و 2-الكلمة بدون الواو 3- نفس الكلمة start
+      if (words[word].startsWith('و')) {
+          words.push(words[word].split(/(^و)/).filter(Boolean));
+      }
+
+      // ب 1-ب 2-الكلمة بدون الباء 3- نفس الكلمة start
+      if (words[word].startsWith('ب')) {
+          words.push(words[word].split(/(^ب)/).filter(Boolean));
+      }
+
+      // ال  1-ال 2-الكلمة بدون ال 3- نفس الكلمة start
+      if (words[word].startsWith('ال')) {
+          words.push(words[word].split(/(^ال)/).filter(Boolean));
+      }
+
+      // و. 1-واو الجماعة 2- الكلمة بدون واو الجماعة   end
+      if (words[word].endsWith('و')) {
+          words.push(words[word].split(/(و$)/).filter(Boolean));
+      }
+
+      // ها 1-ها 2- الكلمة بدون ها  end
+      if (words[word].endsWith('ها')) {
+          words.push(words[word].split(/(ها$)/).filter(Boolean));
+      }
+
+      // هما 1-هما 2- الكلمة بدون هما   end
+      if (words[word].endsWith('هما')) {
+          words.push(words[word].split(/(هما$)/).filter(Boolean));
+      }
+
+      // نا  1-"نا" 2- الكلمة بدون "نا" 3- نفس الكلمة  end
+      if (words[word].endsWith('نا')) {
+          words.push(words[word].split(/(نا$)/).filter(Boolean));
+      }
+
+      // هم 1-"هم" 2- الكلمة بدون "هم" 3- نفس الكلمة  end
+      if (words[word].endsWith('هم')) {
+          words.push(words[word].split(/(هم$)/).filter(Boolean));
+      }
+
+      // هن  1-"هنَّ" 2- الكلمة بدون "هنَّ"
+
+      if (words[word].endsWith('هن')) {
+          words.push(words[word].split(/(هن$)/).filter(Boolean));
+      }
+
+      // ه -"هـ" 2- الكلمة بدون "هـ" 3- نفس الكلمة  end
+      if (words[word].endsWith('ه')) {
+          // console.log((words[word].split(/(ه$)/).filter(Boolean)));
+          processedString = (words[word].split(/(ه$)/).filter(Boolean));
+      }
+
+  }
+
+  return words.flat();
 }
 
 module.exports = router;

@@ -15,25 +15,22 @@
     </title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-<link href="//db.onlinewebfonts.com/c/22b5e24da7d5f327cf3bd91ec55c9fea?family=Traditional+Arabic" rel="stylesheet"
-    type="text/css" />
-
-<script src="javascripts/fileValidator.js"></script>
-<!-- Additional CSS Files -->
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
-
-<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
-
-<link rel="stylesheet" href="assets/css/templatemo-breezed.css">
-
-<link rel="stylesheet" href="assets/css/owl-carousel.css">
-
-<link rel="stylesheet" href="assets/css/lightbox.css">
+    <link href="//db.onlinewebfonts.com/c/22b5e24da7d5f327cf3bd91ec55c9fea?family=Traditional+Arabic" rel="stylesheet"
+        type="text/css" />
 
     <script src="javascripts/fileValidator.js"></script>
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+
+    <link rel="stylesheet" href="assets/css/templatemo-breezed.css">
+
+    <link rel="stylesheet" href="assets/css/owl-carousel.css">
+
+    <link rel="stylesheet" href="assets/css/lightbox.css">
 
 </head>
 
@@ -147,63 +144,68 @@
     <span class="loader"><span class="loader-inner"></span></span>
   </div>
 
- <!-- ***** Features Big Item Start ***** -->
- <section class="section" id="subscribe">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 justify-content-center"
-                style="text-align: center; font-size: xx-large; color: #5fb759;">منشئ قوائم الشيوع</div>
-            <div class="col-lg-6 col-md-6 col-xs-12">
-                <div class="left-text-content">
-                    <!-- <script src="javascripts/fileValidator.js"></script> -->
+    <!-- ***** About Area Starts ***** -->
+    <section class="section" id="about" >
+        <div class="container" style="padding-bottom: 10%;">
+            <div class="row">
+                <div class="col-sm-12 justify-content-center"
+                    style="text-align: center; font-size: xx-large; color: #5fb759;">منشئ قائمة المفردات</div>
+                <div class="col-lg-6 col-md-6 col-xs-12">
+                    <div class="left-text-content">
 
-                    <form id="form" action="/frequency" enctype="multipart/form-data" accept=".txt" accept-charset="UTF-8" method="POST"
-                        style="background-color: transparent;">
-                        <div class="input-group">
 
-                            <label for='file' style="text-align: end;">(txt) إختر الملف بصيغة</label>
-                            <input id="file" type="file" name="myfile" required accept=".txt">
-                        </div>
+                        <form id="form" action="/vocabulary" enctype="multipart/form-data" method="POST">
+                            <div class="input-group">
 
-                        <div class="btn-group">
+                                <label for='file' style="text-align: end;">(txt) إختر الملف بصيغة</label>
+                                <input id="file" type="file" name="myfile" required accept=".txt">
+                            </div>
 
-                            <span>
-                                <div class="input-group">
-                                    <input id="submitBtn" class="submit-btn" type="submit"
-                                        value="إبدأ تحليل النصوص">
-                                </div>
-                            </span>
+                            <div class="btn-group">
 
-                        </div>
-                </div>
-                </form>
+                                <span>
+                                    <div class="input-group">
+                                        <input id="submitBtn" class="submit-btn" type="submit"
+                                            value="إبدأ تحليل النصوص">
+                                    </div>
+                                </span>
 
-            </div>
+                            </div>
 
-            <div class="col-lg-6 col-md-6 col-xs-12">
-                <div class="right-text-content">
-                    <div class="section-heading">
-                        <h6></h6>
-                        <div style="text-align: right; font-size: medium; margin-top: 40px; color: black;">
-                            هذه الأداة تقوم بتكوين قائمة مولدة بمفردات المقرر الذي يتم رفعه للموقع بصيغة (تي اكس
-                            تي)،
-                            وفرزها حسب عدد مرات تكرار كل مفردة تنازليا، ومن ثم إجراء عدة معالجات على القائمة المولدة
-                            من النص،
-                            بهدف تصفيتها من العلامات والرموز والحروف والمفردات غير العربية والسوابق واللواحق،
-                            لإنشاء قائمة بشيوع مفردات النص بأدق شكل ممكن معالجته آليا.
-
-                        </div>
+                        </form>
                     </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-xs-12">
+                    <div class="right-text-content">
+                        <div class="section-heading">
+                            <div style="text-align: right; font-size: medium;">
+                                <br> هذه الأداة تقوم بتوليد قائمة بمفردات النص مصفاة من الرموز التي لا علاقة لها
+                                بالمفردات العربية، وبعد ذلك يتم إخراج النتيجة للمستخدم، عبارة عن: ملفين إلكترونيين
+                                بتنسيق أكسل و(بي دي إف) قابلين للتنزيل، في كل منهما جدول مكون من ثلاثة أعمدة، يوضع فيه:
+                                <div dir="RTL">
+                                    <ol type="1">
+                                        <li>1. رقم الكلمة</li>
+                                        <li>2. الكلمة</li>
+                                        <li>3. مساحة فارغة</li>
+                                    </ol>
+                                </div>
+
+                                ،تتيح للمستخدم كتابة ملاحظاته حول الكلمة، كترجمتها بلغته أو غيرها من الملاحظات.
+
+                            </div>
+                        </div>
 
 
+                    </div>
                 </div>
             </div>
+
+
         </div>
-
-    </div>
-</section>
-<!-- ***** Features Big Item End ***** -->
-
+        </div>
+    </section>
+    <!-- ***** About Area Ends ***** -->
 
 
     <!-- ***** Footer Start ***** -->
