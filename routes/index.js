@@ -1,19 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var path = require('path');
 var fs = require('fs');
 
-
-/* GET home page. */
-router.get('/t', function (req, res, next) {
-  res.render('test');
-});
-
 router.get('/', function (req, res, next) {
-  res.render('home');
-});
-
-router.get('/home', function (req, res, next) {
   res.render('home');
 });
 
@@ -30,7 +19,10 @@ router.get('/comparefreqlists', function (req, res, next) {
   res.render('compareFreqLists');
 });
 
-
+/* GET home page. */
+router.get('/keepalive', function (req, res, next) {
+  res.json({reason: 'keepMeAlive'});
+});
 
 const multer = require("multer");
 
@@ -151,7 +143,7 @@ router.post("/vocabulary", upload, function (req, res, next) {
     // console.log(file);
 
     const data = fs.readFileSync(file.path, 'utf8');
-
+ 
     const normalized = normalize_text(data);
 
     const words = extractWords(normalized);
