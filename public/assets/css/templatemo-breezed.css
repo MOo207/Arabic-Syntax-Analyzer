@@ -1132,7 +1132,7 @@ about
 */
 
 #about {
-  padding: 12% 0px 0px 0px;
+  padding: 12% 0px 5% 0px;
   position: relative;
   z-index: 9;
 }
@@ -1229,7 +1229,7 @@ subscribe
 */
 
 #subscribe {
-  padding: 11% 0px;
+  padding: 15% 0px 7% 0%;
   /* background-image: url(../images/slide-02.jpg);
   background-position: center center;
   background-repeat: no-repeat;
@@ -1279,7 +1279,7 @@ subscribe
 @media (max-width: 767px) {
   #subscribe fieldset {
     text-align: center;
-    margin-bottom: 25%px;
+    margin-bottom: 25%;
   }
 }
 
@@ -1848,7 +1848,7 @@ portfolio
 }
 
 #projects {
-  padding-top: 8%;
+  padding-top: 15%;
   padding-bottom: 5%;
 }
 
