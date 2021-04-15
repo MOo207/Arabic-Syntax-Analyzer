@@ -1,6 +1,4 @@
 $('#document').ready(function () {
-  console.log('ready');
-
 
   $('select').on('invalid', function () {
     if(this.value == null){
@@ -10,12 +8,14 @@ $('#document').ready(function () {
 
   $('input[type=file]').on('invalid', function () {
     var file = this.files[0];
+     
     if (checkFile(file) == 'emptyError')
       this.setCustomValidity('إختر ملفا لرفعه');
   });
 
   $('input[type=file]').on('change', function () {
     var file = this.files[0];
+     
     if (checkFile(file) == 'extError')
       this.setCustomValidity('صيغة الملف ليست مدعومة بعد');
   });
@@ -25,11 +25,11 @@ $('#document').ready(function () {
   });
 
   $('#form').on('submit', function () {
-    console.log('submitted');
+    // console.log('submitted');
   });
 
   function checkFile(file) {
-    console.log(file);
+     
     if (!file) {
       return 'emptyError';
     }

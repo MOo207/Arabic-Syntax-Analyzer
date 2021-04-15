@@ -8,4 +8,3 @@ const httpPort = process.env.HTTP_PORT;
 
 
 httpServer.listen(httpPort, ()=> {console.log('http on '+httpPort)});
-httpServer.setTimeout(120000);

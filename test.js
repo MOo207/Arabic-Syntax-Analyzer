@@ -147,15 +147,15 @@ var fs = require('fs');
 var file = fs.readFileSync('test.txt', 'utf-8');
 // console.log(file);
 
-var norm = normalize_text(file);
+// var norm = normalize_text(file);
 // console.log(norm);
 
 
-var split = extractWords(norm);
+var split = extractWords(file);
 // console.log(split);
 
 
-var list = removePreAndPost(split);
+// var list = removePreAndPost(split);
 // var pre = removePreAndPost(split, 'و');
 // console.log(pre);
 

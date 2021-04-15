@@ -21,7 +21,7 @@ router.get('/comparefreqlists', function (req, res, next) {
 
 /* GET home page. */
 router.get('/keepalive', function (req, res, next) {
-  res.json({reason: 'keepMeAlive'});
+  res.json({ reason: 'keepMeAlive' });
 });
 
 const multer = require("multer");
@@ -48,7 +48,7 @@ var storage = multer.diskStorage(
 
 var upload = multer({
   storage: storage,
-  limits: { fileSize: 20 * 1000 * 1000 },
+  limits: { fileSize: 2 * 1000 * 1000 },
   fileFilter: function (req, file, cb) {
     if (file.mimetype !== 'text/plain') {
       // console.log(file.mimetype);
@@ -89,10 +89,10 @@ router.post("/compare", upload, function (req, res, next) {
     const file = req.file; // We get the file in req.file
 
     const data = fs.readFileSync(file.path, 'utf8');
-    // const data = readFileSync_encoding(file.path, '7bit');
-    // console.log(data);
 
     const words = extractWords(data);
+    
+    deleteFile(file.path);
 
     const wordCount = words.length;
 
@@ -130,6 +130,16 @@ router.post("/compare", upload, function (req, res, next) {
 });
 
 
+function deleteFile(file){
+  try {
+    fs.unlinkSync(file);
+    console.log("file removed");
+    //file removed
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 router.post("/vocabulary", upload, function (req, res, next) {
   try {
     if (!req.file) { // in case we do not get a file we return
@@ -143,10 +153,10 @@ router.post("/vocabulary", upload, function (req, res, next) {
     // console.log(file);
 
     const data = fs.readFileSync(file.path, 'utf8');
- 
-    const normalized = normalize_text(data);
 
-    const words = extractWords(normalized);
+    deleteFile(file.path);
+
+    const words = extractWords(data);
 
     const wordCount = words.length;
 
@@ -167,25 +177,6 @@ router.post("/vocabulary", upload, function (req, res, next) {
 });
 
 
-function normalize_text(text) {
-
-  //remove special characters
-  text = text.replace(/([^\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z 0-9])/g, '');
-  //normalize Arabic
-  // text = text.replace(/(آ|إ|أ)/g, 'ا');
-  // text = text.replace(/(ة)/g, 'ه');
-  // text = text.replace(/(ئ|ؤ)/g, 'ء')
-  // text = text.replace(/(ى)/g, 'ي');
-
-  //convert arabic numerals to english counterparts.
-  var starter = 0x660;
-  for (var i = 0; i < 10; i++) {
-    text.replace(String.fromCharCode(starter + i), String.fromCharCode(48 + i));
-  }
-
-  return text;
-}
-
 
 router.post("/frequency", upload, function (req, res, next) {
   try {
@@ -201,15 +192,21 @@ router.post("/frequency", upload, function (req, res, next) {
 
     const data = fs.readFileSync(file.path, 'utf8');
 
-    const normalized = normalize_text(data);
+    deleteFile(file.path);
 
-    const words = extractWords(normalized);
+    const words = extractWords(data);
 
-    const process = removePreAndPost(words);
+    const w = preW(words);
+
+    const b = preB(w);
+
+    const al  = preAl(b);
+
+    const post = removePost(al);
 
     const wordCount = words.length;
 
-    const occurrenceList = getOccurrenceList(process);
+    const occurrenceList = getOccurrenceList(post);
 
     const uniqueWordCount = occurrenceList.length;
 
@@ -226,7 +223,7 @@ router.post("/frequency", upload, function (req, res, next) {
 });
 
 function extractWords(text) {
-  const re = /([ء-ي]*[^\w|^\s\]^\/^[$&+,ـ{}—!&:;=?@،«»#|"'؛<>.^*َ()%!-])/ig;
+  const re = /([؀-ۿ]*[^\s\d\w\\/\[\]\-:.«»ـ(),;"'*?؟!@#$%^&؛،{}+=])/ig;
   var found = text.match(re);
   if (!found) {
     return found = "0";
@@ -241,16 +238,16 @@ function getOccurrenceList(words) {
   var uniqueWords = Array.from(unique);
   counter = 0;
   for (const outerIndex in uniqueWords) {
+    counter = 0;
     var word = uniqueWords[outerIndex];
-    var joins = words.join(" ");
-    var matches = joins.match(new RegExp(word, 'g'));
-    occurrenceList[outerIndex] = [matches.length, word];
+    for (const innerIndex in words) {
+      if (word === words[innerIndex]) {
+        counter++;
+      }
+    }
+    occurrenceList[outerIndex] = [counter, word];
   }
-  const filter = occurrenceList.filter(function (w) {
-    return (w[1] == "و" || w[1] == "ب") || w[1].length > 1
-  });
-
-  let sorted = filter.sort(function (a, b) {
+  let sorted = occurrenceList.sort(function (a, b) {
     return a[0] < b[0] ? 1 : -1;
   });
   return sorted;
@@ -305,61 +302,80 @@ function getPercentage(match) {
   return trueList;
 }
 
-function removePreAndPost(words) {
+function preW(words) {
   list = words;
   for (const word in words) {
 
-      // و 1-و 2-الكلمة بدون الواو 3- نفس الكلمة start
-      if (words[word].startsWith('و')) {
-          words.push(words[word].split(/(^و)/).filter(Boolean));
-      }
+    // و 1-و 2-الكلمة بدون الواو 3- نفس الكلمة start
+    if (words[word].startsWith('و')) {
+      words.push(words[word].split(/(^و)/).filter(Boolean));
+    }
+  }
+  return words.flat();
+}
 
-      // ب 1-ب 2-الكلمة بدون الباء 3- نفس الكلمة start
-      if (words[word].startsWith('ب')) {
-          words.push(words[word].split(/(^ب)/).filter(Boolean));
-      }
+function preB(words) {
+  list = words;
+  for (const word in words) {
+    // ب 1-ب 2-الكلمة بدون الباء 3- نفس الكلمة start
+    if (words[word].startsWith('ب')) {
+      words.push(words[word].split(/(^ب)/).filter(Boolean));
+    }
+  return words.flat();
+  }
+}
 
-      // ال  1-ال 2-الكلمة بدون ال 3- نفس الكلمة start
-      if (words[word].startsWith('ال')) {
-          words.push(words[word].split(/(^ال)/).filter(Boolean));
-      }
+function preAl(words) {
+  list = words;
+  for (const word in words) {
+    // ال  1-ال 2-الكلمة بدون ال 3- نفس الكلمة start
+    if (words[word].startsWith('ال')) {
+      words.push(words[word].split(/(^ال)/).filter(Boolean));
+    }
+  return words.flat();
+}
+}
+   
+function removePost(words) {
+  list = words;
+  for (const word in words) {
 
-      // و. 1-واو الجماعة 2- الكلمة بدون واو الجماعة   end
-      if (words[word].endsWith('و')) {
-          words.push(words[word].split(/(و$)/).filter(Boolean));
-      }
+    // و. 1-واو الجماعة 2- الكلمة بدون واو الجماعة   end
+    if (words[word].endsWith('و')) {
+      words.push(words[word].split(/(و$)/).filter(Boolean));
+    }
 
-      // ها 1-ها 2- الكلمة بدون ها  end
-      if (words[word].endsWith('ها')) {
-          words.push(words[word].split(/(ها$)/).filter(Boolean));
-      }
+    // ها 1-ها 2- الكلمة بدون ها  end
+    if (words[word].endsWith('ها')) {
+      words.push(words[word].split(/(ها$)/).filter(Boolean));
+    }
 
-      // هما 1-هما 2- الكلمة بدون هما   end
-      if (words[word].endsWith('هما')) {
-          words.push(words[word].split(/(هما$)/).filter(Boolean));
-      }
+    // هما 1-هما 2- الكلمة بدون هما   end
+    if (words[word].endsWith('هما')) {
+      words.push(words[word].split(/(هما$)/).filter(Boolean));
+    }
 
-      // نا  1-"نا" 2- الكلمة بدون "نا" 3- نفس الكلمة  end
-      if (words[word].endsWith('نا')) {
-          words.push(words[word].split(/(نا$)/).filter(Boolean));
-      }
+    // نا  1-"نا" 2- الكلمة بدون "نا" 3- نفس الكلمة  end
+    if (words[word].endsWith('نا')) {
+      words.push(words[word].split(/(نا$)/).filter(Boolean));
+    }
 
-      // هم 1-"هم" 2- الكلمة بدون "هم" 3- نفس الكلمة  end
-      if (words[word].endsWith('هم')) {
-          words.push(words[word].split(/(هم$)/).filter(Boolean));
-      }
+    // هم 1-"هم" 2- الكلمة بدون "هم" 3- نفس الكلمة  end
+    if (words[word].endsWith('هم')) {
+      words.push(words[word].split(/(هم$)/).filter(Boolean));
+    }
 
-      // هن  1-"هنَّ" 2- الكلمة بدون "هنَّ"
+    // هن  1-"هنَّ" 2- الكلمة بدون "هنَّ"
 
-      if (words[word].endsWith('هن')) {
-          words.push(words[word].split(/(هن$)/).filter(Boolean));
-      }
+    if (words[word].endsWith('هن')) {
+      words.push(words[word].split(/(هن$)/).filter(Boolean));
+    }
 
-      // ه -"هـ" 2- الكلمة بدون "هـ" 3- نفس الكلمة  end
-      if (words[word].endsWith('ه')) {
-          // console.log((words[word].split(/(ه$)/).filter(Boolean)));
-          processedString = (words[word].split(/(ه$)/).filter(Boolean));
-      }
+    // ه -"هـ" 2- الكلمة بدون "هـ" 3- نفس الكلمة  end
+    if (words[word].endsWith('ه')) {
+      // console.log((words[word].split(/(ه$)/).filter(Boolean)));
+      words.push(words[word].split(/(ه$)/).filter(Boolean));
+    }
 
   }
 
