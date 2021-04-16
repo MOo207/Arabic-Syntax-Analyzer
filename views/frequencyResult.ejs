@@ -82,7 +82,7 @@
                     var table = $('#myDynamicTable').DataTable(
                         {
 
-                            buttons: ['copy',
+                            buttons: [
                                 {
                                     extend: 'excel',
                                     className: 'fa fa-file-excel-o',
@@ -90,16 +90,29 @@
                                     title: $('h1').html(),
                                     text: 'إكسل',
                                     exportOptions: {
-                                        columns: [0,1,2,3]
+                                        columns: [0, 1, 2, 3]
                                     },
                                     somethingLikeRender: function (data, type, row, meta) {
                                         // EDIT CELLS...
 
                                     }
                                 }
-                                ,   'colvis'],
+                                , {
+                                    extend: 'copy',
+                                    className: 'fa fa-file-excel-o',
+                                    defaultContent: '',
 
-                            lengthMenu: [10, 50, 100, 500, 1000],
+                                    text: 'نسخ الى الحافظة',
+                                },
+                                , {
+                                    extend: 'colvis',
+                                    className: 'fa fa-file-excel-o',
+                                    defaultContent: '',
+
+                                    text: 'الأعمدة الظاهرة',
+                                },],
+
+                            lengthMenu: [10, 50, 500, 1000, 5000],
                             dom: 'Blfrtip',
                             order: [[1, "desc"]],
                             initComplete: function () {

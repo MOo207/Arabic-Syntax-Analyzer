@@ -223,7 +223,7 @@ router.post("/frequency", upload, function (req, res, next) {
 });
 
 function extractWords(text) {
-  const re = /([؀-ۿ]*[^\s\d\w\\/\[\]\-:.«»ـ(),;"'*?؟!@#$%^&؛،{}+=])/ig;
+  const re = /([؀-ۿ]*[^\s\d\w\\/\[\]\-:.،«»ـ(),;"'*?؟!@#$%^&؛،{}+=])/ig;
   var found = text.match(re);
   if (!found) {
     return found = "0";

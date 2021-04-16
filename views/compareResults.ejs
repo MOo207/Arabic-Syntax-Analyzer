@@ -101,7 +101,7 @@
                 title: $('h1').html(),
                 text: 'إكسل',
                 exportOptions: {
-                  columns: [0,1,2]
+                  columns: [0, 1, 2]
                 },
                 somethingLikeRender: function (data, type, row, meta) {
                   // EDIT CELLS...
@@ -185,22 +185,35 @@
         $('#document').ready(function () {
           var table = $('#unSimilarityTable').DataTable(
             {
-              buttons: ['copy', 
-              {
-                extend: 'excel',
-                className: 'fa fa-file-excel-o',
-                defaultContent: '',
-                title: $('h1').html(),
-                text: 'إكسل',
-                exportOptions: {
-                  columns: [0,1,2]
-                },
-                somethingLikeRender: function (data, type, row, meta) {
-                  // EDIT CELLS...
+              buttons: [
+                {
+                  extend: 'excel',
+                  className: 'fa fa-file-excel-o',
+                  defaultContent: '',
+                  title: $('h1').html(),
+                  text: 'إكسل',
+                  exportOptions: {
+                    columns: [0, 1, 2]
+                  },
+                  somethingLikeRender: function (data, type, row, meta) {
+                    // EDIT CELLS...
 
-                }
-              },
-              ,   'colvis'],
+                  }
+                },
+                , {
+                  extend: 'copy',
+                  className: 'fa fa-file-excel-o',
+                  defaultContent: '',
+
+                  text: 'نسخ الى الحافظة',
+                },
+                , {
+                  extend: 'colvis',
+                  className: 'fa fa-file-excel-o',
+                  defaultContent: '',
+
+                  text: 'الأعمدة الظاهرة',
+                },],
               dom: 'Blfrtip',
               initComplete: function () {
                 table.buttons().container().appendTo('#unSimilarityTable_wrapper .col-md-6:eq(0)');
@@ -255,7 +268,7 @@
                 $('#document').ready(function () {
                   var table = $('#myDynamicTable').DataTable(
                     {
-                      buttons: ['copy', 'excel',   'colvis'],
+                      buttons: ['copy', 'excel', 'colvis'],
                       lengthChange: false,
                       dom: 'Blfrtip',
                       data: occurrenceList.chunk(2),
